@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>妈妈突然开始擦边了 · 状态栏</title>
+<style>
+    :root {
+        --primary: 330, 48%, 58%;
+        --secondary: 42, 55%, 60%;
+        --bg-dark: 330, 14%, 7%;
+        --bg-card: 330, 12%, 11%;
+        --text-main: 35, 15%, 92%;
+        --text-muted: 30, 10%, 58%;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body { background: transparent; }
+
+    .status-wrapper {
+        width: 100%;
+        max-width: 560px;
+        margin: 1.1rem auto;
+        background: hsla(var(--bg-dark), 0.86);
+        backdrop-filter: blur(24px) saturate(1.6);
+        -webkit-backdrop-filter: blur(24px) saturate(1.6);
+        border-radius: 22px;
+        border: 1px solid hsla(var(--primary), 0.16);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28), inset 0 0 0 1px hsla(var(--primary), 0.05);
+        padding: 12px 14px 13px;
+        font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        color: hsl(var(--text-main));
+        position: relative;
+        overflow: hidden;
+        animation: fadeUp 0.45s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    }
+
+    .status-wrapper::before {
+        content: '';
+        position: absolute; top: -60%; left: -40%;
+        width: 180%; height: 220%;
+        background:
+            radial-gradient(ellipse at 20% 10%, hsla(var(--primary), 0.10), transparent 55%),
+            radial-gradient(ellipse at 85% 90%, hsla(var(--secondary), 0.07), transparent 55%);
+        animation: drift 18s ease-in-out infinite alternate;
+        pointer-events: none; z-index: 0;
+    }
+    @keyframes drift {
+        0% { transform: translate(-3%, -2%) scale(1); opacity: 0.55; }
+        100% { transform: translate(3%, 2%) scale(1.06); opacity: 0.95; }
+    }
+    @keyframes fadeUp {
+        0% { opacity: 0; transform: translateY(12px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes softPulse {
+        0%, 100% { opacity: 0.55; }
+        50% { opacity: 1; }
+    }
+
+    .status-wrapper > * { position: relative; z-index: 1; }
+
+    /* 顶栏 */
+    .top-bar {
+        display: flex; align-items: center; justify-content: space-between;
+        padding-bottom: 8px;
+        margin-bottom: 9px;
+        border-bottom: 1px solid hsla(var(--primary), 0.09);
+    }
+    .who {
+        display: flex; align-items: baseline; gap: 7px;
+        font-size: 12.5px; font-weight: 700; letter-spacing: 1.5px;
+        color: hsl(var(--text-main));
+    }
+    .who .age { font-size: 10px; font-weight: 400; letter-spacing: 0; color: hsl(var(--text-muted)); }
+    .stage-tag {
+        font-size: 9px; letter-spacing: 0.8px;
+        padding: 2px 7px; border-radius: 20px;
+        color: hsla(var(--secondary), 0.85);
+        background: hsla(var(--secondary), 0.08);
+        border: 1px solid hsla(var(--secondary), 0.2);
+    }
+    .fold-btn {
+        width: 22px; height: 22px; border-radius: 7px;
+        background: hsla(var(--primary), 0.07);
+        border: 1px solid hsla(var(--primary), 0.14);
+        color: hsl(var(--text-muted));
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; transition: all 0.25s ease;
+    }
+    .fold-btn:hover { background: hsla(var(--primary), 0.16); color: hsl(var(--text-main)); }
+    .fold-btn svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.3s ease; }
+
+    /* 行 */
+    .row {
+        display: flex; align-items: flex-start; gap: 8px;
+        padding: 4px 0;
+        font-size: 12px; line-height: 1.55;
+    }
+    .row .ico {
+        flex: 0 0 13px; width: 13px; height: 13px;
+        margin-top: 3px;
+        fill: none; stroke: hsla(var(--secondary), 0.85);
+        stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .row .key {
+        flex: 0 0 auto;
+        font-size: 10.5px; letter-spacing: 0.6px;
+        color: hsl(var(--text-muted));
+        margin-top: 1px;
+    }
+    .row .val {
+        flex: 1; min-width: 0;
+        color: hsl(var(--text-main), 0.92);
+    }
+    .row.cloth .val { color: hsl(var(--text-main)); }
+
+    /* 三轨 */
+    .gauges {
+        display: grid; grid-template-columns: repeat(3, 1fr);
+        gap: 9px;
+        margin: 9px 0 7px;
+        padding: 9px 10px;
+        border-radius: 14px;
+        background: hsla(0, 0%, 100%, 0.022);
+        border: 1px solid hsla(var(--primary), 0.08);
+    }
+    .gauge-item { min-width: 0; }
+    .gauge-head {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 4px; margin-bottom: 5px;
+    }
+    .gauge-name {
+        display: flex; align-items: center; gap: 3px;
+        font-size: 9.5px; letter-spacing: 0.2px;
+        color: hsl(var(--text-muted));
+        white-space: nowrap;
+    }
+    .gauge-name svg {
+        width: 10px; height: 10px; fill: none; stroke-width: 1.8;
+        stroke-linecap: round; stroke-linejoin: round;
+        flex: 0 0 10px;
+    }
+    .gauge-item.open .gauge-name svg { stroke: hsla(160, 30%, 58%); }
+    .gauge-item.guard .gauge-name svg { stroke: hsla(200, 35%, 62%); }
+    .gauge-item.enjoy .gauge-name svg { stroke: hsl(var(--primary)); }
+    .gauge-num {
+        font-size: 10.5px; font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0;
+    }
+    .gauge-item.open .gauge-num { color: hsl(160, 32%, 64%); }
+    .gauge-item.guard .gauge-num { color: hsl(200, 38%, 68%); }
+    .gauge-item.enjoy .gauge-num { color: hsl(var(--primary)); }
+    .track {
+        height: 4px; border-radius: 3px;
+        background: hsla(0, 0%, 100%, 0.06);
+        overflow: hidden;
+    }
+    .fill {
+        height: 100%; width: 0%;
+        border-radius: 3px;
+        transition: width 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .gauge-item.open .fill { background: linear-gradient(90deg, hsla(160, 22%, 40%), hsla(160, 32%, 62%)); }
+    .gauge-item.guard .fill { background: linear-gradient(90deg, hsla(200, 28%, 42%), hsla(200, 38%, 66%)); }
+    .gauge-item.enjoy .fill { background: linear-gradient(90deg, hsla(var(--primary), 0.55), hsla(var(--primary), 1)); }
+    .gauge-item.enjoy .fill.hot { animation: softPulse 2.2s ease-in-out infinite; }
+
+    /* 心声 */
+    .inner-voice {
+        display: flex; align-items: flex-start; gap: 7px;
+        margin-top: 6px;
+        padding: 7px 10px;
+        border-left: 2px solid hsla(var(--primary), 0.42);
+        border-radius: 4px;
+        background: hsla(var(--primary), 0.035);
+    }
+    .inner-voice svg {
+        flex: 0 0 12px; width: 12px; height: 12px; margin-top: 2px;
+        fill: none; stroke: hsla(var(--primary), 0.9);
+        stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .inner-voice .text {
+        font-family: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+        font-size: 12px; line-height: 1.7;
+        color: hsla(var(--text-main), 0.82);
+        letter-spacing: 0.3px;
+        font-style: normal;
+    }
+
+    /* 折叠 */
+    .status-wrapper.collapsed .collapsible { display: none; }
+    .status-wrapper.collapsed .fold-btn svg { transform: rotate(180deg); }
+
+    @media (max-width: 480px) {
+        .status-wrapper { padding: 10px 11px 11px; border-radius: 18px; }
+        .row { font-size: 11.5px; }
+        .row .key { font-size: 10px; }
+        .gauges { gap: 8px; padding: 8px 9px; }
+        .inner-voice .text { font-size: 11.5px; }
+        .who { font-size: 12px; }
+    }
+    @media (min-width: 600px) {
+        .status-wrapper { max-width: 600px; padding: 14px 18px 15px; border-radius: 26px; }
+        .row { font-size: 12.5px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="status-wrapper" id="statusApp">
+    <div id="status-data" style="display:none;">$1</div>
+
+    <div class="top-bar">
+        <div class="who">
+            江美晴
+            <span class="age">38</span>
+            <span class="stage-tag" id="stageTag">S1</span>
+        </div>
+        <button class="fold-btn" id="toggleFold" aria-label="折叠状态栏">
+            <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        </button>
+    </div>
+
+    <div class="collapsible">
+        <!-- 时间地点 -->
+        <div class="row">
+            <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>
+            <span class="key">时间</span>
+            <span class="val" id="v-time">…</span>
+        </div>
+        <div class="row">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M12 21s7-6.4 7-11a7 7 0 1 0-14 0c0 4.6 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>
+            <span class="key">地点</span>
+            <span class="val" id="v-loc">…</span>
+        </div>
+
+        <!-- 着装 -->
+        <div class="row cloth">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M8 3l4 2 4-2 4 3-2.5 3L16 8v13H8V8L6.5 9 4 6z"/></svg>
+            <span class="key">着装</span>
+            <span class="val" id="v-cloth">…</span>
+        </div>
+
+        <!-- 身体 -->
+        <div class="row">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9z"/></svg>
+            <span class="key">身体</span>
+            <span class="val" id="v-body">…</span>
+        </div>
+
+        <!-- 三轨 -->
+        <div class="gauges">
+            <div class="gauge-item open">
+                <div class="gauge-head">
+                    <span class="gauge-name">
+                        <svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1.5"/><circle cx="15.5" cy="12" r="1"/></svg>
+                        敞开度
+                    </span>
+                    <span class="gauge-num" id="v-open">0%</span>
+                </div>
+                <div class="track"><div class="fill" id="b-open"></div></div>
+            </div>
+            <div class="gauge-item enjoy">
+                <div class="gauge-head">
+                    <span class="gauge-name">
+                        <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.6-7 9-7 9z"/></svg>
+                        动摇
+                    </span>
+                    <span class="gauge-num" id="v-enjoy">0%</span>
+                </div>
+                <div class="track"><div class="fill" id="b-enjoy"></div></div>
+            </div>
+            <div class="gauge-item guard">
+                <div class="gauge-head">
+                    <span class="gauge-name">
+                        <svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6z"/></svg>
+                        防线
+                    </span>
+                    <span class="gauge-num" id="v-guard">0%</span>
+                </div>
+                <div class="track"><div class="fill" id="b-guard"></div></div>
+            </div>
+        </div>
+
+        <!-- 心声 -->
+        <div class="inner-voice">
+            <svg viewBox="0 0 24 24"><path d="M21 11.5a7.5 7.5 0 0 1-7.5 7.5H8l-4 3v-4.4A7.5 7.5 0 0 1 10.5 4h3A7.5 7.5 0 0 1 21 11.5z"/></svg>
+            <span class="text" id="v-inner">…</span>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    'use strict';
+
+    var dataContainer = document.getElementById('status-data');
+    if (!dataContainer) return;
+    var rawYaml = dataContainer.textContent.trim();
+
+    // 扁平键值解析：键名唯一，不依赖缩进
+    function extractVal(key) {
+        var lines = rawYaml.split('\n');
+        for (var i = 0; i < lines.length; i++) {
+            var t = lines[i].trim();
+            if (t.indexOf(key + ':') === 0) {
+                var val = t.substring(key.length + 1).trim();
+                if ((val.charAt(0) === '"' && val.charAt(val.length - 1) === '"') ||
+                    (val.charAt(0) === "'" && val.charAt(val.length - 1) === "'")) {
+                    val = val.substring(1, val.length - 1);
+                }
+                return val;
+            }
+        }
+        return '';
+    }
+
+    function setText(id, text, fallback) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = (text && text !== '') ? text : (fallback || '…');
+    }
+
+    function gauge(barId, numId, value) {
+        var v = parseInt(value, 10);
+        if (isNaN(v)) v = 0;
+        v = Math.min(100, Math.max(0, v));
+        var bar = document.getElementById(barId);
+        if (bar) {
+            bar.style.width = v + '%';
+            if (barId === 'b-enjoy') {
+                if (v >= 60) bar.classList.add('hot');
+                else bar.classList.remove('hot');
+            }
+        }
+        var num = document.getElementById(numId);
+        if (num) num.textContent = v + '%';
+    }
+
+    setText('v-time', extractVal('时间'), '…');
+    setText('v-loc', extractVal('地点'), '…');
+    setText('v-cloth', extractVal('着装'), '…');
+    setText('v-body', extractVal('身体'), '…');
+    setText('v-inner', extractVal('心声'), '…');
+
+    gauge('b-open', 'v-open', extractVal('敞开度'));
+    gauge('b-guard', 'v-guard', extractVal('防线'));
+    gauge('b-enjoy', 'v-enjoy', extractVal('动摇'));
+
+    var stage = extractVal('阶段') || 'S1';
+    setText('stageTag', stage, 'S1');
+
+    // 折叠（记忆）
+    var foldBtn = document.getElementById('toggleFold');
+    var wrapper = document.getElementById('statusApp');
+    if (foldBtn && wrapper) {
+        try {
+            if (localStorage.getItem('mmcl_bar_folded') === 'true') wrapper.classList.add('collapsed');
+        } catch (err) {}
+        foldBtn.addEventListener('click', function () {
+            wrapper.classList.toggle('collapsed');
+            try {
+                localStorage.setItem('mmcl_bar_folded', wrapper.classList.contains('collapsed') ? 'true' : 'false');
+            } catch (err) {}
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

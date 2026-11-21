@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>妈妈突然开始擦边了 · 选项栏</title>
+<style>
+    :root {
+        --primary: 330, 48%, 58%;
+        --secondary: 42, 55%, 60%;
+        --bg-dark: 330, 14%, 7%;
+        --text-main: 35, 15%, 92%;
+        --text-muted: 30, 10%, 58%;
+        --grid-cols: repeat(3, 1fr);
+        --btn-radius: 12px;
+        --btn-padding: 12px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body { background: transparent; }
+
+    .options-module {
+        width: 100%; max-width: 580px; margin: 1.2rem auto;
+        background: hsla(var(--bg-dark), 0.85);
+        backdrop-filter: blur(24px) saturate(1.6);
+        -webkit-backdrop-filter: blur(24px) saturate(1.6);
+        border-radius: 30px;
+        border: 1px solid hsla(var(--primary), 0.18);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 0 0 1px hsla(var(--primary), 0.05);
+        padding: 16px 14px 14px;
+        font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        color: hsl(var(--text-main));
+        position: relative; overflow: hidden;
+        animation: fadeUp 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+        min-height: 60px;
+    }
+
+    .options-module::before {
+        content: ''; position: absolute; top: -50%; left: -50%;
+        width: 200%; height: 200%;
+        background: radial-gradient(ellipse at 70% 20%, hsla(var(--secondary), 0.05), transparent 60%);
+        animation: shimmer 12s ease-in-out infinite alternate;
+        pointer-events: none; z-index: 0;
+    }
+    @keyframes shimmer {
+        0% { transform: translate(-5%, -5%) scale(1); opacity: 0.35; }
+        100% { transform: translate(5%, 5%) scale(1.1); opacity: 0.75; }
+    }
+    @keyframes fadeUp {
+        0% { opacity: 0; transform: translateY(20px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .options-module > * { position: relative; z-index: 1; }
+
+    .options-header {
+        display: flex; justify-content: space-between; align-items: center;
+        padding-bottom: 10px; border-bottom: 1px solid hsla(var(--primary), 0.08);
+        margin-bottom: 12px;
+    }
+
+    .options-title {
+        font-size: 13px; font-weight: 700; letter-spacing: 1.5px;
+        color: hsl(var(--secondary));
+        display: flex; align-items: center; gap: 6px;
+    }
+    .options-title svg {
+        width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2;
+        stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .options-hint {
+        font-size: 10.5px; color: hsl(var(--text-muted), 0.65);
+        display: flex; align-items: center; gap: 4px;
+    }
+    .options-hint svg {
+        width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.5;
+        stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .options-inner {
+        display: grid;
+        grid-template-columns: var(--grid-cols);
+        gap: 8px; padding: 2px 0;
+    }
+
+    .opt-btn {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: var(--btn-padding) 8px;
+        background: hsla(0, 0%, 100%, 0.03);
+        border: 1px solid hsla(var(--primary), 0.10);
+        border-radius: var(--btn-radius);
+        color: hsl(var(--text-main));
+        font-size: 12px; font-weight: 450; line-height: 1.45;
+        text-align: center; cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+        user-select: none; -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation; gap: 4px; position: relative; font-family: inherit;
+    }
+
+    .opt-btn .badge {
+        display: block; font-size: 11px; font-weight: 600;
+        color: hsla(var(--primary), 0.45); letter-spacing: 0.5px;
+        transition: color 0.3s ease;
+    }
+
+    .opt-btn:hover {
+        background: hsla(var(--secondary), 0.08);
+        border-color: hsla(var(--secondary), 0.24);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+    .opt-btn:hover .badge { color: hsl(var(--secondary)); }
+
+    .opt-btn:active { transform: scale(0.94) translateY(0); transition-duration: 0.05s; }
+
+    .opt-btn.disabled { opacity: 0.35; pointer-events: none; transform: none !important; }
+
+    .options-empty {
+        color: hsl(var(--text-muted), 0.3); font-size: 11px; letter-spacing: 1px;
+        text-align: center; width: 100%; padding: 10px 0; grid-column: 1 / -1;
+    }
+
+    @media (max-width: 520px) {
+        .options-inner { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 440px) {
+        .options-inner { grid-template-columns: 1fr; }
+        .opt-btn { flex-direction: row; justify-content: flex-start; padding: 12px 14px; text-align: left; }
+        .opt-btn .badge { margin-right: 8px; }
+    }
+    @media (max-width: 480px) {
+        .options-module { padding: 12px 10px 14px; border-radius: 20px; }
+        .options-title { font-size: 12px; }
+    }
+    @media (min-width: 600px) {
+        .options-module { max-width: 620px; padding: 20px 18px 18px; border-radius: 34px; }
+        .opt-btn { padding: 15px 10px; font-size: 13.5px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="options-module" id="options-root">
+    <div class="options-header">
+        <div class="options-title">
+            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+            你怎么做
+        </div>
+        <div class="options-hint">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12.01" y2="16"/><line x1="12" y1="12" x2="12" y2="8"/></svg>
+            点击触发
+        </div>
+    </div>
+    <div class="options-inner" id="options-list"></div>
+</div>
+
+<!-- 极简占位容器，保证 $1 能被酒馆正常替换 -->
+<div id="options-data" style="display:none;">$1</div>
+
+<script>
+(function () {
+    'use strict';
+
+    // 两种落地方式都兼容：内联替换时 #options-data 里就是 $1；外链加载时由骨架注入
+    var slot = document.getElementById('options-data');
+    var raw = (slot && slot.textContent ? slot.textContent : '$1').trim();
+    var container = document.getElementById('options-list');
+    if (!container) return;
+
+    function sendOption(text) {
+        if (!text) return;
+        if (typeof triggerSlash === 'function') {
+            triggerSlash('/send ' + text + '|/trigger');
+            return;
+        }
+        var textarea = document.querySelector('#send_textarea') ||
+            (window.parent && window.parent.document.querySelector('#send_textarea'));
+        if (textarea) {
+            textarea.value = text;
+            textarea.dispatchEvent(new Event('input', { bubbles: true }));
+            var sendBtn = document.querySelector('#send_button') || document.querySelector('#send_btn');
+            if (sendBtn) setTimeout(function () { sendBtn.click(); }, 80);
+        }
+    }
+
+    var items = raw ? raw.split('|').map(function (s) { return s.trim(); }).filter(function (s) { return s.length > 0; }) : [];
+    if (items.length === 0) {
+        container.innerHTML = '<div class="options-empty">✦ 等待行动选项 ✦</div>';
+        return;
+    }
+
+    var badges = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩'];
+    var html = '';
+    items.forEach(function (opt, index) {
+        var safe = opt.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        html += '<button class="opt-btn" data-opt="' + safe + '">' +
+            '<span class="badge">' + (badges[index] || (index + 1)) + '</span>' +
+            '<span>' + safe + '</span></button>';
+    });
+    container.innerHTML = html;
+
+    container.addEventListener('click', function (e) {
+        var btn = e.target.closest('.opt-btn');
+        if (!btn || btn.classList.contains('disabled')) return;
+        var text = btn.getAttribute('data-opt');
+        if (text) {
+            document.querySelectorAll('.opt-btn').forEach(function (b) { b.classList.add('disabled'); });
+            sendOption(text);
+            setTimeout(function () {
+                document.querySelectorAll('.opt-btn').forEach(function (b) { b.classList.remove('disabled'); });
+            }, 5000);
+        }
+    });
+
+    container.addEventListener('touchstart', function (e) {
+        var btn = e.target.closest('.opt-btn');
+        if (!btn) return;
+        btn.style.transition = 'none';
+        btn.style.transform = 'scale(0.96)';
+        setTimeout(function () {
+            btn.style.transition = '';
+            btn.style.transform = '';
+        }, 100);
+    }, { passive: true });
+})();
+</script>
+
+</body>
+</html>

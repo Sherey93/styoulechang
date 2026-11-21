@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>妈妈突然开始擦边了 · 欢迎</title>
+<style>
+    :root {
+        --primary: 330, 48%, 58%;
+        --secondary: 42, 55%, 60%;
+        --bg-dark: 330, 14%, 7%;
+        --bg-card: 330, 12%, 11%;
+        --text-main: 35, 15%, 92%;
+        --text-muted: 30, 10%, 58%;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body { min-height: 100%; }
+
+    body {
+        background: hsl(var(--bg-dark));
+        font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        color: hsl(var(--text-main));
+        display: flex; justify-content: center;
+        padding: 26px 14px 40px;
+        position: relative; overflow-x: hidden;
+    }
+
+    body::before {
+        content: '';
+        position: fixed; inset: 0;
+        background:
+            radial-gradient(circle at 22% 6%, hsla(var(--secondary), 0.10), transparent 44%),
+            radial-gradient(circle at 82% 92%, hsla(var(--primary), 0.13), transparent 48%);
+        pointer-events: none; z-index: 0;
+        animation: breathe 15s ease-in-out infinite alternate;
+    }
+    @keyframes breathe {
+        0% { opacity: 0.5; transform: scale(1); }
+        100% { opacity: 1; transform: scale(1.07); }
+    }
+
+    .container {
+        width: 100%; max-width: 620px;
+        position: relative; z-index: 1;
+        animation: rise 0.9s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+    }
+    @keyframes rise {
+        0% { opacity: 0; transform: translateY(28px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---------- 标题 ---------- */
+    .header { text-align: center; padding: 18px 0 26px; }
+
+    .title-glitch {
+        position: relative;
+        display: inline-block;
+        font-family: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+        font-size: 34px; font-weight: 700; letter-spacing: 5px;
+        color: hsl(var(--text-main));
+        text-shadow: 0 0 40px hsla(var(--primary), 0.45);
+        line-height: 1.35;
+    }
+    .title-glitch .glitch-layer {
+        position: absolute; left: 0; top: 0; width: 100%;
+        opacity: 0.5; pointer-events: none;
+    }
+    .title-glitch .glitch-layer:nth-child(2) {
+        color: hsl(var(--primary));
+        animation: glitchA 5.5s steps(1) infinite;
+        clip-path: inset(0 0 62% 0);
+    }
+    .title-glitch .glitch-layer:nth-child(3) {
+        color: hsl(var(--secondary));
+        animation: glitchB 6.5s steps(1) infinite;
+        clip-path: inset(64% 0 0 0);
+    }
+    @keyframes glitchA {
+        0%, 92%, 100% { transform: translate(0, 0); opacity: 0; }
+        93% { transform: translate(-3px, -1px); opacity: 0.55; }
+        95% { transform: translate(2px, 1px); opacity: 0.4; }
+    }
+    @keyframes glitchB {
+        0%, 90%, 100% { transform: translate(0, 0); opacity: 0; }
+        91% { transform: translate(3px, 1px); opacity: 0.45; }
+        94% { transform: translate(-2px, -1px); opacity: 0.35; }
+    }
+
+    .title-sub {
+        margin-top: 14px;
+        font-size: 11.5px; letter-spacing: 2.5px;
+        color: hsl(var(--text-muted));
+    }
+    .title-author {
+        margin-top: 10px;
+        font-size: 11px; letter-spacing: 2px;
+        color: hsl(var(--text-muted), 0.8);
+    }
+    .title-author strong { color: hsl(var(--secondary)); letter-spacing: 2px; font-weight: 600; }
+
+    /* ---------- 主视觉（纯 CSS 纹理） ---------- */
+    .hero-image {
+        position: relative;
+        height: 260px;
+        border-radius: 26px;
+        overflow: hidden;
+        border: 1px solid hsla(var(--primary), 0.16);
+        box-shadow: 0 10px 36px rgba(0, 0, 0, 0.36), inset 0 0 0 1px hsla(var(--primary), 0.05);
+        margin-bottom: 16px;
+    }
+
+    .hero-image .bg-layer {
+        position: absolute; inset: 0;
+        background-color: hsl(330, 16%, 9%);
+        background-image:
+            /* 砖缝 */
+            repeating-linear-gradient(0deg, hsla(0,0%,100%,0.026) 0 1px, transparent 1px 24px),
+            repeating-linear-gradient(90deg, hsla(0,0%,100%,0.02) 0 1px, transparent 1px 52px),
+            /* 砖墙的明暗块 */
+            repeating-linear-gradient(90deg, hsla(0,0%,100%,0.015) 0 52px, transparent 52px 104px),
+            /* 底部舞台光 */
+            radial-gradient(ellipse at 50% 118%, hsla(var(--primary), 0.55), transparent 62%),
+            /* 顶上那盏灯 */
+            radial-gradient(circle at 74% 6%, hsla(var(--secondary), 0.42), transparent 34%),
+            /* 夜 */
+            linear-gradient(180deg, hsl(330, 18%, 6%) 0%, hsl(330, 16%, 10%) 55%, hsl(330, 20%, 12%) 100%);
+        animation: lightShift 12s ease-in-out infinite alternate;
+    }
+    @keyframes lightShift {
+        0% { filter: brightness(0.94) saturate(1); }
+        100% { filter: brightness(1.08) saturate(1.12); }
+    }
+
+    /* 雨丝 */
+    .hero-image .bg-layer::after {
+        content: '';
+        position: absolute; inset: -20%;
+        background-image: repeating-linear-gradient(
+            76deg,
+            hsla(0, 0%, 100%, 0.10) 0 1px,
+            transparent 1px 9px
+        );
+        animation: rain 1.6s linear infinite;
+        opacity: 0.5;
+    }
+    @keyframes rain {
+        0% { transform: translateY(-12px); }
+        100% { transform: translateY(12px); }
+    }
+
+    .hero-image .overlay-dark {
+        position: absolute; inset: 0;
+        background:
+            linear-gradient(180deg, hsla(330, 20%, 4%, 0.55) 0%, transparent 32%, hsla(330, 20%, 4%, 0.82) 100%),
+            radial-gradient(circle at 50% 50%, transparent 30%, hsla(330, 20%, 3%, 0.7) 100%);
+    }
+
+    .caption {
+        position: absolute; left: 0; right: 0; bottom: 22px;
+        text-align: center; padding: 0 18px;
+    }
+    .caption-bold {
+        display: inline-block;
+        font-family: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+        font-size: 17px; letter-spacing: 2px; line-height: 1.7;
+        color: hsl(var(--text-main));
+        text-shadow: 0 2px 18px hsla(330, 25%, 2%, 0.9), 0 0 30px hsla(var(--primary), 0.3);
+    }
+
+    /* ---------- 故事区 ---------- */
+    .story-area {
+        background: hsla(var(--bg-card), 0.66);
+        border: 1px solid hsla(var(--primary), 0.12);
+        border-radius: 24px;
+        padding: 22px 20px 26px;
+        margin-bottom: 18px;
+        backdrop-filter: blur(20px) saturate(1.5);
+        -webkit-backdrop-filter: blur(20px) saturate(1.5);
+        box-shadow: 0 6px 26px rgba(0, 0, 0, 0.24);
+        min-height: 240px;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .story-label {
+        display: flex; align-items: center; gap: 8px;
+        font-size: 11px; font-weight: 700; letter-spacing: 2.5px;
+        color: hsl(var(--secondary));
+        margin-bottom: 16px;
+    }
+    .story-label svg {
+        width: 15px; height: 15px; fill: none; stroke: currentColor;
+        stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .typewriter-content {
+        font-family: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+        font-size: 14px; line-height: 2.05;
+        color: hsl(var(--text-main), 0.9);
+        letter-spacing: 0.4px;
+        min-height: 150px;
+    }
+
+    .typewriter-content .paragraph { display: block; }
+    .typewriter-content .paragraph + .paragraph { margin-top: 4px; }
+
+    .typewriter-content .divider-line {
+        display: block;
+        text-align: center;
+        font-size: 9px; letter-spacing: 6px;
+        color: hsla(var(--secondary), 0.55);
+        margin: 12px 0;
+        opacity: 0; transition: opacity 0.5s ease;
+    }
+    .typewriter-content .divider-line.show { opacity: 1; }
+
+    .typewriter-content .cursor {
+        display: inline-block;
+        width: 7px; height: 16px;
+        background: hsla(var(--primary), 0.85);
+        vertical-align: -2px;
+        margin-left: 2px;
+        animation: caret 1s steps(1) infinite;
+        box-shadow: 0 0 12px hsla(var(--primary), 0.6);
+    }
+    .typewriter-content .cursor.done { animation: none; opacity: 0; }
+    @keyframes caret {
+        0%, 49% { opacity: 1; }
+        50%, 100% { opacity: 0; }
+    }
+
+    .skip-hint {
+        position: absolute; right: 18px; bottom: 10px;
+        font-size: 9.5px; letter-spacing: 2px;
+        color: hsl(var(--text-muted), 0.45);
+        opacity: 0; transition: opacity 0.6s ease;
+    }
+    .skip-hint.show { opacity: 1; }
+
+    /* ---------- 按钮 ---------- */
+    .action { text-align: center; padding: 4px 0 10px; }
+
+    .btn-enter {
+        position: relative;
+        display: inline-flex; align-items: center; gap: 10px;
+        padding: 15px 40px;
+        border: none; border-radius: 999px;
+        background: linear-gradient(120deg, hsla(var(--primary), 0.92), hsla(var(--secondary), 0.86));
+        color: hsl(330, 25%, 8%);
+        font-family: inherit;
+        font-size: 14px; font-weight: 700; letter-spacing: 4px;
+        cursor: pointer;
+        box-shadow: 0 10px 34px hsla(var(--primary), 0.3), inset 0 1px 0 hsla(0, 0%, 100%, 0.35);
+        transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+        overflow: hidden;
+    }
+    .btn-enter:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 16px 44px hsla(var(--primary), 0.42), inset 0 1px 0 hsla(0, 0%, 100%, 0.45);
+    }
+    .btn-enter:active { transform: scale(0.97); }
+
+    .btn-icon-svg {
+        width: 17px; height: 17px; fill: none; stroke: currentColor;
+        stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .btn-glow-ring {
+        position: absolute; inset: 0; border-radius: 999px;
+        box-shadow: 0 0 0 0 hsla(var(--secondary), 0.5);
+        animation: ring 2.8s ease-out infinite;
+        pointer-events: none;
+    }
+    @keyframes ring {
+        0% { box-shadow: 0 0 0 0 hsla(var(--secondary), 0.45); }
+        70% { box-shadow: 0 0 0 16px hsla(var(--secondary), 0); }
+        100% { box-shadow: 0 0 0 0 hsla(var(--secondary), 0); }
+    }
+
+    /* ---------- 页脚 ---------- */
+    .footer {
+        text-align: center;
+        padding: 20px 0 4px;
+        font-size: 11px; letter-spacing: 2.5px;
+        color: hsl(var(--text-muted), 0.75);
+        line-height: 2.2;
+    }
+    .footer .footer-deco { color: hsla(var(--secondary), 0.8); letter-spacing: 5px; }
+
+    @media (max-width: 480px) {
+        body { padding: 16px 10px 30px; }
+        .title-glitch { font-size: 26px; letter-spacing: 3px; }
+        .hero-image { height: 210px; border-radius: 20px; }
+        .caption-bold { font-size: 14.5px; }
+        .story-area { padding: 18px 15px 24px; border-radius: 20px; }
+        .typewriter-content { font-size: 13px; }
+        .btn-enter { padding: 13px 32px; font-size: 13px; letter-spacing: 3px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="container" id="app">
+
+    <header class="header">
+        <div class="title-glitch">
+            妈妈突然开始擦边了
+            <span class="glitch-layer" aria-hidden="true">妈妈突然开始擦边了</span>
+            <span class="glitch-layer" aria-hidden="true">妈妈突然开始擦边了</span>
+        </div>
+        <div class="title-sub">—— 五十八平，一扇随时会响的门 ——</div>
+        <div class="title-author">作者 · <strong>LUNAH</strong></div>
+    </header>
+
+    <div class="hero-image" id="heroImage">
+        <div class="bg-layer"></div>
+        <div class="overlay-dark"></div>
+        <div class="caption">
+            <span class="caption-bold">「十点半散。你先睡，别等我。」</span>
+        </div>
+    </div>
+
+    <div class="story-area" id="storyArea">
+        <div class="story-label">
+            <svg viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="4" y1="10" x2="20" y2="10"/><line x1="4" y1="14" x2="20" y2="14"/><line x1="4" y1="18" x2="16" y2="18"/></svg>
+            故事简介
+        </div>
+        <div class="typewriter-content" id="typewriter"></div>
+        <div class="skip-hint" id="skipHint">✦ 点击任意位置跳过 ✦</div>
+    </div>
+
+    <div class="action">
+        <button class="btn-enter" onclick="switchOpening(1)">
+            <span>进屋里</span>
+            <svg class="btn-icon-svg" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <span class="btn-glow-ring"></span>
+        </button>
+    </div>
+
+    <div class="footer">
+        <div class="footer-deco">✦ 请多多评论 ✦</div>
+        <span>by LUNAH</span>
+    </div>
+
+</div>
+
+<script>
+    // ================================================================
+    // 【1】跳转函数 · 索引固定为 1
+    // ================================================================
+    async function switchOpening(swipeId) {
+        var clickedCard = event.currentTarget;
+        clickedCard.style.opacity = '0.6';
+        clickedCard.style.pointerEvents = 'none';
+        try {
+            var messages;
+            try {
+                messages = await getChatMessages?.('0', { include_swipe: true });
+            } catch (e) {
+                var context = window.SillyTavern?.getContext?.();
+                messages = context?.chat?.messages;
+            }
+            if (!messages || messages.length === 0) throw new Error('没有找到聊天消息。');
+            var userMessage = messages[0];
+            if (!userMessage.swipes) throw new Error('第一条消息没有滑动条。');
+            if (userMessage.swipes.length <= swipeId) throw new Error('滑动条 ' + swipeId + ' 不存在。');
+            var targetSwipe = userMessage.swipes[swipeId];
+            var setChatMessage = window.setChatMessage || window.SillyTavern?.getContext?.()?.setChatMessage;
+            if (typeof setChatMessage === 'function') {
+                await setChatMessage(targetSwipe, 0, { swipe_id: swipeId, refresh: 'display_and_render_current' });
+            } else if (typeof userMessage.setSwipe === 'function') {
+                userMessage.setSwipe(swipeId);
+            }
+        } catch (error) {
+            console.error('切换失败:', error);
+        } finally {
+            clickedCard.style.opacity = '1';
+            clickedCard.style.pointerEvents = 'auto';
+        }
+    }
+
+    // ================================================================
+    // 【2】打字机引擎
+    // ================================================================
+    var storyParagraphs = [
+        '杭州城北，和睦新村三幢五〇二。五十八平，两室一厅，铁门要往上抬一下才开。',
+        '江美晴三十八岁，在城东的乐园演了十一年。玩偶服、公主、小丑，一个月四千出头。',
+        '两年前园区开始做擦边场，老板开价，她当场拒了。第三个月，她自己去敲了那个门。',
+        '她儿子十八岁，高三。那身衣服晾在阳台上，他每天路过，每天都不能看。'
+    ];
+
+    var CHAR_INTERVAL = 34;
+    var PARAGRAPH_PAUSE = 420;
+
+    var typewriterEl = document.getElementById('typewriter');
+    var skipHint = document.getElementById('skipHint');
+    var storyArea = document.getElementById('storyArea');
+
+    var isTyping = false;
+    var isDone = false;
+    var timer = null;
+
+    function buildFullHTML() {
+        var html = '';
+        for (var i = 0; i < storyParagraphs.length; i++) {
+            html += '<span class="paragraph">' + storyParagraphs[i] + '</span>';
+            if (i < storyParagraphs.length - 1) {
+                html += '<span class="divider-line show">✦ ✦ ✦</span>';
+            }
+        }
+        return html;
+    }
+
+    function startTypewriter() {
+        if (!typewriterEl) return;
+        if (isTyping || isDone) return;
+
+        isTyping = true;
+        typewriterEl.innerHTML = '';
+        if (skipHint) skipHint.classList.remove('show');
+
+        var charQueue = [];
+        for (var pIdx = 0; pIdx < storyParagraphs.length; pIdx++) {
+            charQueue.push({ type: 'paragraph-start', index: pIdx });
+            var text = storyParagraphs[pIdx];
+            for (var cIdx = 0; cIdx < text.length; cIdx++) {
+                charQueue.push({ type: 'char', char: text[cIdx], index: pIdx });
+            }
+            charQueue.push({ type: 'paragraph-end', index: pIdx });
+        }
+
+        var queueIndex = 0;
+        var currentParagraph = null;
+        var cursor = document.createElement('span');
+        cursor.className = 'cursor';
+
+        function typeNext() {
+            if (queueIndex >= charQueue.length) {
+                isTyping = false;
+                isDone = true;
+                cursor.classList.add('done');
+                if (skipHint) skipHint.classList.remove('show');
+                return;
+            }
+
+            var item = charQueue[queueIndex++];
+
+            if (item.type === 'paragraph-start') {
+                currentParagraph = document.createElement('span');
+                currentParagraph.className = 'paragraph';
+                typewriterEl.appendChild(currentParagraph);
+                if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
+                currentParagraph.appendChild(cursor);
+                timer = setTimeout(typeNext, 60);
+                return;
+            }
+
+            if (item.type === 'char') {
+                if (cursor.parentNode) {
+                    cursor.parentNode.insertBefore(document.createTextNode(item.char), cursor);
+                }
+                timer = setTimeout(typeNext, CHAR_INTERVAL);
+                return;
+            }
+
+            if (item.type === 'paragraph-end') {
+                if (item.index < storyParagraphs.length - 1) {
+                    var divider = document.createElement('span');
+                    divider.className = 'divider-line';
+                    typewriterEl.appendChild(divider);
+                    setTimeout(function () { divider.classList.add('show'); }, 40);
+                }
+                timer = setTimeout(typeNext, PARAGRAPH_PAUSE);
+                return;
+            }
+        }
+
+        typeNext();
+        setTimeout(function () {
+            if (skipHint && isTyping) skipHint.classList.add('show');
+        }, 900);
+    }
+
+    function skipTypewriter() {
+        if (isDone) return;
+        if (timer) clearTimeout(timer);
+        isTyping = false;
+        isDone = true;
+        typewriterEl.innerHTML = buildFullHTML();
+        var cursor = document.createElement('span');
+        cursor.className = 'cursor done';
+        typewriterEl.appendChild(cursor);
+        if (skipHint) skipHint.classList.remove('show');
+    }
+
+    if (storyArea) {
+        storyArea.addEventListener('click', function () {
+            if (!isDone) skipTypewriter();
+        });
+    }
+
+    startTypewriter();
+</script>
+
+</body>
+</html>
